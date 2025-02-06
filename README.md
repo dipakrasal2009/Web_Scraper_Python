@@ -1,25 +1,67 @@
-# Dockerized Web Scraper with MySQL Integration using Python
+# Web Scraping & Data Storage with Docker, Python & MySQL
 
-This project demonstrates how to build a **Dockerized web scraper** using Python that scrapes movie quotes from a website and stores the data in a **MySQL database** running in a separate Docker container. The setup uses a **custom Docker network** with the `bridge` driver for container communication.
+## 📌 Project Overview
+This project automates web scraping using Python and stores the scraped data into a MySQL database, all within a Dockerized environment. By containerizing the application, we ensure portability, scalability, and ease of deployment.
 
-## 🚀 Features:
-- **Web Scraping** with Python using the `requests` and `BeautifulSoup` libraries.
-- **Dockerized MySQL** container to store the scraped data.
+## 🚀 Technologies Used
+- **Python** (requests, BeautifulSoup, mysql.connector, time)
+- **MySQL** (Dockerized database for data storage)
+- **Docker** (Containerized environment for easy deployment)
 
-## 🛠️ Prerequisites:
-- Docker installed on your machine.
-- Basic understanding of Docker and Python.
-- Python packages: `requests`, `BeautifulSoup`, `mysql-connector-python`.
+## 📂 Project Structure
+```
+├── app.py                 # Python script for web scraping & storing data
+├── Dockerfile             # Dockerfile to build the image
+├── requirements.txt       # Dependencies required for the project
+└── README.md              # Project documentation
+```
 
+## 🔧 Setup & Installation
+### 1️⃣ Pull & Run MySQL Docker Image
+```sh
+docker pull mysql:latest
+docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=scraping_db -p 3306:3306 -d mysql:latest
+```
 
-SQL commands
+### 2️⃣ Clone This Repository
+```sh
+git clone <your-github-repo-link>
+cd <your-project-folder>
+```
 
-docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=redhat -e MYSQL_DATABASE=scraper_db -p 3306:3306 MySQL:latest 
+### 3️⃣ Configure `app.py`
+Update **database connection details** in `app.py`:
+```python
+mysql_host = "<MYSQL_CONTAINER_IP>"
+mysql_user = "root"
+mysql_password = "root"
+database = "scraping_db"
+```
 
-docker exec -it mysql_container mysql -u root -predhat
+### 4️⃣ Build & Run the Docker Image
+```sh
+docker build -t web-scraper .
+docker run --name scraper-container --link mysql-container -d web-scraper
+```
 
-USE scraper_db;
+## 📜 How It Works
+1. **Web Scraping:** `app.py` fetches data from a URL using `requests` & `BeautifulSoup`.
+2. **Database Storage:** Scraped data is inserted into the MySQL database.
+3. **Dockerized Execution:** Running the Docker image automates the entire process.
 
-CREATE TABLE quotes ( id INT AUTO_INCREMENT PRIMARY KEY, text TEXT NOT NULL, author VARCHAR(255) NOT NULL);
+## 📌 Future Enhancements
+- Add **logging & error handling**
+- Implement **scheduled scraping** with `cron` or `Celery`
+- Create a **REST API** to fetch stored data
+
+## 🛠 Contributing
+Feel free to fork this repo, improve the project, and create a pull request! 🚀
+
+## 📩 Connect with Me
+For any queries or discussions, connect with me on [LinkedIn](https://www.linkedin.com/in/dipakrasal2009/)!
+
+---
+
+### 📌 **Project Repository:** [GitHub Link](https://github.com/dipakrasal2009/Web_Scraper_Python)
 
 
