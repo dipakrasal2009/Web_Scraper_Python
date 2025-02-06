@@ -23,6 +23,7 @@ def wait_for_db():
 
 def scrape_quotes():
     URL = "https://quotes.toscrape.com/"
+    #URL = "https://github.com/dipakrasal2009"
     response = requests.get(URL)
 
     if response.status_code != 200:
