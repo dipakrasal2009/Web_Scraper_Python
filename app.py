@@ -1,4 +1,5 @@
 import requests
+
 from bs4 import BeautifulSoup
 import mysql.connector
 import time
@@ -39,6 +40,21 @@ def scrape_quotes():
         quotes.append((text, author))
 
     return quotes
+    
+def create_quotes_table():
+    conn = mysql.connector.connect(**DB_CONFIG)
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS quotes (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            text TEXT NOT NULL,
+            author VARCHAR(255) NOT NULL
+        );
+    """)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    print("Quotes table is ready!")
 
 def save_to_db(quotes):
     conn = mysql.connector.connect(**DB_CONFIG)
@@ -51,6 +67,7 @@ def save_to_db(quotes):
 
 if __name__ == "__main__":
     wait_for_db()
+    create_quotes_table() 
     quotes = scrape_quotes()
     if quotes:
         save_to_db(quotes)
